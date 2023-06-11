@@ -24,8 +24,12 @@ export class ActionsController {
 
   @Get(':id')
   @ApiOkResponse({type: ActionEntity})
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.actionsService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const action = await this.actionsService.findOne(id);
+    if (!action) {
+      throw new NotFoundException(`Action with ID ${id} does not exist.`);
+    } 
+    return action;
   }
 
   @Patch(':id')
