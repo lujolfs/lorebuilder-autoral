@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ActionsService } from './actions.service';
 import { CreateActionDto } from './dto/create-action.dto';
@@ -24,19 +24,19 @@ export class ActionsController {
 
   @Get(':id')
   @ApiOkResponse({type: ActionEntity})
-  findOne(@Param('id') id: string) {
-    return this.actionsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.actionsService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOkResponse({type: ActionEntity})
-  update(@Param('id') id: string, @Body() updateActionDto: UpdateActionDto) {
-    return this.actionsService.update(+id, updateActionDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateActionDto: UpdateActionDto) {
+    return this.actionsService.update(id, updateActionDto);
   }
 
   @Delete(':id')
   @ApiOkResponse({type: ActionEntity})
-  remove(@Param('id') id: string) {
-    return this.actionsService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.actionsService.remove(id);
   }
 }
