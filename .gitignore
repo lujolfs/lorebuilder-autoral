@@ -128,3 +128,14 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# compiled output
+backend/dist
+backend/node_modules
+
+# OS
+.DS_Store
+
+# Tests
+backend/coverage
+backend/.nyc_output

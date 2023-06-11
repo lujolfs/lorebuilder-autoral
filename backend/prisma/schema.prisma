@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique @db.VarChar(255)
+  password     String    @db.VarChar(255)
+  github_email String?   @unique @db.VarChar(255)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  Session      Session[]
+  Setting      Setting[]
+
+  @@map("users")
+}
+
+model Session {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  token      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Setting {
+  id         Int        @id @default(autoincrement())
+  user_id    Int
+  User       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  name       String     @db.VarChar(255)
+  ruleset    String     @db.VarChar(255)
+  image      String?
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  Campaign   Campaign[]
+  Lineage    Lineage[]
+
+  @@map("settings")
+}
+
+model Campaign {
+  id         Int         @id @default(autoincrement())
+  setting_id Int
+  Setting    Setting     @relation(fields: [setting_id], references: [id], onDelete: Cascade)
+  name       String      @db.VarChar(255)
+  image      String?
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  Character  Character[]
+
+  @@map("campaigns")
+}
+
+model Lineage {
+  id          Int         @id @default(autoincrement())
+  setting_id  Int
+  Setting     Setting     @relation(fields: [setting_id], references: [id], onDelete: Cascade)
+  name        String      @db.VarChar(255)
+  image       String?
+  is_playable Boolean
+  description String
+  Character   Character[]
+
+  @@map("lineages")
+}
+
+model Character {
+  id           Int       @id @default(autoincrement())
+  campaign_id  Int
+  Campaign     Campaign  @relation(fields: [campaign_id], references: [id], onDelete: Cascade)
+  name         String    @db.VarChar(255)
+  image        String?
+  lineage_id   Int
+  Lineage      Lineage   @relation(fields: [lineage_id], references: [id], onDelete: NoAction)
+  hp           Int
+  strength     Int
+  dexterity    Int
+  constitution Int
+  intelligence Int
+  wisdom       Int
+  charisma     Int
+  speed        String    @db.VarChar(255)
+  biography    String
+  photo        String
+  Moveset      Moveset[]
+
+  @@map("characters")
+}
+
+model Action {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  description String    @db.VarChar(255)
+  bonus       String    @db.VarChar(255)
+  damage_type String    @db.VarChar(255)
+  damage_dice String    @db.VarChar(255)
+  Moveset     Moveset[]
+
+  @@map("actions")
+}
+
+model Moveset {
+  id           Int       @id @default(autoincrement())
+  character_id Int
+  Character    Character @relation(fields: [character_id], references: [id], onDelete: Cascade)
+  action_id    Int
+  Action       Action    @relation(fields: [action_id], references: [id], onDelete: NoAction)
+
+  @@map("movesets")
+}
+
+
