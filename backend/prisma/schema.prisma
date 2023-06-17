@@ -11,15 +11,16 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  name         String    @db.VarChar(255)
-  email        String    @unique @db.VarChar(255)
-  password     String    @db.VarChar(255)
-  github_email String?   @unique @db.VarChar(255)
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(255)
+  email        String     @unique @db.VarChar(255)
+  password     String     @db.VarChar(255)
+  github_email String?    @unique @db.VarChar(255)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
   Session      Session[]
   Setting      Setting[]
+  Campaign     Campaign[]
 
   @@map("users")
 }
@@ -52,6 +53,8 @@ model Campaign {
   id         Int         @id @default(autoincrement())
   setting_id Int
   Setting    Setting     @relation(fields: [setting_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  User       User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
   name       String      @db.VarChar(255)
   image      String?
   created_at DateTime    @default(now())

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { CampaignEntity } from './entities/campaign.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('campaigns')
 @ApiTags('campaigns')
@@ -10,27 +12,42 @@ export class CampaignsController {
   constructor(private readonly campaignsService: CampaignsService) {}
 
   @Post()
-  create(@Body() createCampaignDto: CreateCampaignDto) {
-    return this.campaignsService.create(createCampaignDto);
-  }
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: CampaignEntity })
+  async create(@Body() createCampaignDto: CreateCampaignDto, @Request() req: any) {
+    const user_id = +req?.user?.id;
+    createCampaignDto.user_id = user_id;
+    return new CampaignEntity(await this.campaignsService.create(createCampaignDto));  }
 
   @Get()
-  findAll() {
-    return this.campaignsService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({type: CampaignEntity, isArray: true})
+  async findAllByUser(@Request() req: any) {
+    const user_id = +req?.user?.id;
+    const campaigns = await this.campaignsService.findAllByUser(user_id);
+    return campaigns.map((campaign) => new CampaignEntity(campaign));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.campaignsService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async findOne(@Param('id') id: number) {
+    return new CampaignEntity (await this.campaignsService.findOne(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCampaignDto: UpdateCampaignDto) {
-    return this.campaignsService.update(+id, updateCampaignDto);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async update(@Param('id') id: number, @Body() updateCampaignDto: UpdateCampaignDto) {
+    return new CampaignEntity(await this.campaignsService.update(id, updateCampaignDto));
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.campaignsService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async remove(@Param('id') id: number) {
+    return new CampaignEntity (await this.campaignsService.remove(id));
   }
 }

@@ -11,7 +11,7 @@ export class SettingsService {
     return this.prisma.setting.create({data: createSettingDto});
   }
 
-  findAllByUser(user_id) {
+  findAllByUser(user_id: number) {
     return this.prisma.setting.findMany({where: {user_id}});
   }
 
