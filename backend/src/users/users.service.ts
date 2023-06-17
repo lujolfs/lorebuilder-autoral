@@ -15,6 +15,7 @@ export class UsersService {
       createUserDto.password,
       roundsOfHashing,
     );
+    
     createUserDto.password = hashedPassword;
 
     return this.prisma.user.create({data: createUserDto});

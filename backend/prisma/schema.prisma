@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(255)
   email        String    @unique @db.VarChar(255)
   password     String    @db.VarChar(255)
   github_email String?   @unique @db.VarChar(255)
@@ -36,7 +37,7 @@ model Setting {
   id         Int        @id @default(autoincrement())
   user_id    Int
   User       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  name       String     @db.VarChar(255)
+  name       String     @unique @db.VarChar(255)
   ruleset    String     @db.VarChar(255)
   image      String?
   created_at DateTime   @default(now())
@@ -117,5 +118,3 @@ model Moveset {
 
   @@map("movesets")
 }
-
-
