@@ -11,16 +11,17 @@ datasource db {
 }
 
 model User {
-  id           Int        @id @default(autoincrement())
-  name         String     @db.VarChar(255)
-  email        String     @unique @db.VarChar(255)
-  password     String     @db.VarChar(255)
-  github_email String?    @unique @db.VarChar(255)
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
+  id           Int         @id @default(autoincrement())
+  name         String      @db.VarChar(255)
+  email        String      @unique @db.VarChar(255)
+  password     String      @db.VarChar(255)
+  github_email String?     @unique @db.VarChar(255)
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
   Session      Session[]
   Setting      Setting[]
   Campaign     Campaign[]
+  Character    Character[]
 
   @@map("users")
 }
@@ -70,7 +71,7 @@ model Lineage {
   Setting     Setting     @relation(fields: [setting_id], references: [id], onDelete: Cascade)
   name        String      @db.VarChar(255)
   image       String?
-  is_playable Boolean
+  is_playable Boolean     @default(true)
   description String
   Character   Character[]
 
@@ -81,10 +82,11 @@ model Character {
   id           Int       @id @default(autoincrement())
   campaign_id  Int
   Campaign     Campaign  @relation(fields: [campaign_id], references: [id], onDelete: Cascade)
-  name         String    @db.VarChar(255)
-  image        String?
   lineage_id   Int
   Lineage      Lineage   @relation(fields: [lineage_id], references: [id], onDelete: NoAction)
+  user_id      Int
+  User         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  name         String    @db.VarChar(255)
   hp           Int
   strength     Int
   dexterity    Int

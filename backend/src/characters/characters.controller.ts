@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { CharactersService } from './characters.service';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { UpdateCharacterDto } from './dto/update-character.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { CharacterEntity } from './entities/character.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('characters')
 @ApiTags('characters')
@@ -10,27 +12,43 @@ export class CharactersController {
   constructor(private readonly charactersService: CharactersService) {}
 
   @Post()
-  create(@Body() createCharacterDto: CreateCharacterDto) {
-    return this.charactersService.create(createCharacterDto);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: CharacterEntity })
+  async create(@Body() CreateCharacterDto: CreateCharacterDto, @Request() req: any) {
+    const user_id = +req?.user?.id;
+    CreateCharacterDto.user_id = user_id;
+    return new CharacterEntity(await this.charactersService.create(CreateCharacterDto));
   }
 
   @Get()
-  findAll() {
-    return this.charactersService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({type: CharacterEntity, isArray: true})
+  async findAllByUser(@Request() req: any) {
+    const user_id = +req?.user?.id;
+    const settings = await this.charactersService.findAllByUser(user_id);
+    return settings.map((setting) => new CharacterEntity(setting));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.charactersService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async findOne(@Param('id') id: number) {
+    return new CharacterEntity (await this.charactersService.findOne(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCharacterDto: UpdateCharacterDto) {
-    return this.charactersService.update(+id, updateCharacterDto);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async update(@Param('id') id: number, @Body() updateSettingDto: UpdateCharacterDto) {
+    return new CharacterEntity (await this.charactersService.update(id, updateSettingDto));
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.charactersService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async remove(@Param('id') id: number) {
+    return new CharacterEntity (await this.charactersService.remove(id));
   }
 }
