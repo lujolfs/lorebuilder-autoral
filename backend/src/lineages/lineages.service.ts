@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLineageDto } from './dto/create-lineage.dto';
 import { UpdateLineageDto } from './dto/update-lineage.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class LineagesService {
-  create(createLineageDto: CreateLineageDto) {
-    return 'This action adds a new lineage';
+  constructor(private prisma:  PrismaService) {};
+
+  create(CreateLineageDto: CreateLineageDto) {
+    return this.prisma.lineage.create({data: CreateLineageDto});
   }
 
   findAll() {
-    return `This action returns all lineages`;
+    return this.prisma.lineage.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} lineage`;
+    return this.prisma.setting.findUnique({where: {id}});
   }
 
-  update(id: number, updateLineageDto: UpdateLineageDto) {
-    return `This action updates a #${id} lineage`;
+  update(id: number, UpdateLineageDto: UpdateLineageDto) {
+    return this.prisma.setting.update({where: {id}, data: UpdateLineageDto});
   }
 
   remove(id: number) {
-    return `This action removes a #${id} lineage`;
+    return this.prisma.setting.delete({where: {id}});
   }
 }

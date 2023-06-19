@@ -27,8 +27,8 @@ export class CharactersController {
   @ApiOkResponse({type: CharacterEntity, isArray: true})
   async findAllByUser(@Request() req: any) {
     const user_id = +req?.user?.id;
-    const settings = await this.charactersService.findAllByUser(user_id);
-    return settings.map((setting) => new CharacterEntity(setting));
+    const characters = await this.charactersService.findAllByUser(user_id);
+    return characters.map((character) => new CharacterEntity(character));
   }
 
   @Get(':id')
@@ -41,8 +41,8 @@ export class CharactersController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  async update(@Param('id') id: number, @Body() updateSettingDto: UpdateCharacterDto) {
-    return new CharacterEntity (await this.charactersService.update(id, updateSettingDto));
+  async update(@Param('id') id: number, @Body() UpdateCharacterDto: UpdateCharacterDto) {
+    return new CharacterEntity (await this.charactersService.update(id, UpdateCharacterDto));
   }
 
   @Delete(':id')
