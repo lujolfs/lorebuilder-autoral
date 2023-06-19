@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { MovesetsService } from './movesets.service';
 import { CreateMovesetDto } from './dto/create-moveset.dto';
 import { UpdateMovesetDto } from './dto/update-moveset.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { MovesetEntity } from './entities/moveset.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('movesets')
 @ApiTags('movesets')
@@ -10,27 +12,40 @@ export class MovesetsController {
   constructor(private readonly movesetsService: MovesetsService) {}
 
   @Post()
-  create(@Body() createMovesetDto: CreateMovesetDto) {
-    return this.movesetsService.create(createMovesetDto);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: MovesetEntity })
+  async create(@Body() CreateMovesetDto: CreateMovesetDto, @Request() req: any) {
+    return new MovesetEntity(await this.movesetsService.create(CreateMovesetDto));
   }
 
   @Get()
-  findAll() {
-    return this.movesetsService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({type: MovesetEntity, isArray: true})
+  async findAll(@Request() req: any) {
+    const movesets = await this.movesetsService.findAll();
+    return movesets.map((moveset) => new MovesetEntity(moveset));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.movesetsService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async findOne(@Param('id') id: number) {
+    return new MovesetEntity (await this.movesetsService.findOne(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMovesetDto: UpdateMovesetDto) {
-    return this.movesetsService.update(+id, updateMovesetDto);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async update(@Param('id') id: number, @Body() UpdateMovesetDto: UpdateMovesetDto) {
+    return new MovesetEntity (await this.movesetsService.update(id, UpdateMovesetDto));
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.movesetsService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async remove(@Param('id') id: number) {
+    return new MovesetEntity (await this.movesetsService.remove(id));
   }
 }
