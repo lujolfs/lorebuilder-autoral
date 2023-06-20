@@ -17,6 +17,10 @@ a {
   color: inherit;
 }
 
+input {
+  font-family: var(--font-share);
+}
+
 .container{
   max-width: 1366px;
   min-height: 100vh;

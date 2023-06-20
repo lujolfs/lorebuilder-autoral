@@ -5,10 +5,16 @@ import Link from 'next/link';
 import { share } from '@/app/fonts';
 
 const Login = () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const email: string = e.target[0].value;
+    const password: string = e.target[1].value
+  }
+
   return (
     <div className={styles.container}>
       <div className=''><h1>Acesse sua conta</h1></div>
-      <form className={styles.form}>
+      <form className={`${styles.form} ${share.variable}`} onSubmit={handleSubmit}>
         <h3>E-mail</h3>
         <input type='email' placeholder='Digite seu e-mail' className={styles.input} required></input>
         <h3>Senha</h3>
