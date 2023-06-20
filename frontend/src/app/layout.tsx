@@ -1,9 +1,6 @@
-import Navbar from '@/components/navbar/Navbar'
 import Footer from '@/components/footer/Footer'
 import './globals.css'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import { vt323 } from './fonts'
 
 export const metadata = {
   title: 'Lorebuilder',
@@ -17,10 +14,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-200`}>
-        <Navbar/>
-        {children}
-        <Footer/>
+      <body className={`${vt323.className} bg-slate-200`}>
+        <div className='container'>
+          <div className='filler'></div>
+          {children}
+          <Footer/>
+        </div>
       </body>
     </html>
   )

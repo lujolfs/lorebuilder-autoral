@@ -1,9 +1,9 @@
+import styles from "./page.module.css"
+
 export default function Campaigns() {
     return (
-        <div>
-            <header>
-                <h1>Campanhas</h1>
-            </header>
+        <div className={styles.container}>
+            <h1>Campanhas</h1>
         </div>
     )
 }
