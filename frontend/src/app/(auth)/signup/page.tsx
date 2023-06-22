@@ -2,6 +2,7 @@ import Signup from "@/components/signup/Signup"
 import styles from "./page.module.css"
 
 export default function SignupPage() {
+    
     return (
         <div className={styles.container}>
             <div className={styles.title}>
