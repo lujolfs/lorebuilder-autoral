@@ -1,12 +1,14 @@
+"use client"
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import React from 'react'
 import styles from './navbar.module.css'
+import { useRouter } from 'next/navigation'
 
 const links = [
     {
         id: 1,
         title: "Home",
-        url: "/"
+        url: "/home"
     },
     {
         id: 2,
@@ -21,16 +23,28 @@ const links = [
 ]
 
 const Navbar = () => {
+    const router = useRouter();
+
+   function handleLogout() {
+    localStorage.removeItem('token');
+    console.log("Logout concluído.")
+    router?.push('/');
+   }
+
   return (
     <div className={styles.container}>
-        <Link href="/" className={styles.logo}>LOREBUILDER</Link>
-        <div className={styles.links}>
-            {links.map (link => (
-                <Link key={link.id} href={link.url} className={styles.link}>{link.title}</Link>
-            ))}
-        </div>
-    </div>
-  )
+            <Link href="/home" className={styles.logo}>LOREBUILDER</Link>
+            <div className={styles.subcontainer}>
+                <div className={styles.links}>
+                    {links.map (link => (
+                        <Link key={link.id} href={link.url} className={styles.link}>{link.title}</Link>
+                    ))}
+                </div>
+                <button className={styles.logout} onClick={handleLogout}>
+                    Logout
+                </button>
+            </div>
+        </div>)
 }
 
 export default Navbar

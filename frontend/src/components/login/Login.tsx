@@ -1,17 +1,23 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './login.module.css';
 import Link from 'next/link';
-import useLogin from '@/hooks/api/useLogin';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [disableButton, setDisableButton] = useState(false)
+  const router = useRouter();
 
-  const {loginLoading, login} = useLogin();
+  useEffect(() => {
+   const fetchItem: any = localStorage.getItem('token')
+   if (fetchItem) router?.push('/home')
+  }, [])
 
-  async function submit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    setDisableButton(true);
     try {
       const loginPost = await fetch(`${process.env.NEXT_PUBLIC_APP_API_BASE_URL}/auth/login`, {
         method: "POST",
@@ -24,7 +30,9 @@ const Login = () => {
         }),
       });
       const loginResponse = await loginPost.json();
+      localStorage.setItem("token", loginResponse.accessToken)
       console.log("OK!!!!!", loginResponse);
+      router?.push('/home');
     } catch (error) {
       console.log('Não.')
     }
@@ -33,12 +41,12 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <div className=''><h1>Acesse sua conta</h1></div>
-      <form className={`${styles.form}`} onSubmit={submit}>
+      <form className={`${styles.form}`} onSubmit={handleSubmit}>
         <h3>E-mail</h3>
         <input type='email' value={email}  placeholder='Digite seu e-mail' className={styles.input} onChange={e => setEmail(e.target.value)} required></input>
         <h3>Senha</h3>
         <input type='password' value={password} placeholder='Digite sua senha' className={styles.input} onChange={e => setPassword(e.target.value)} required></input>
-        <button className={styles.button} disabled={loginLoading}>Entrar</button>
+        <button className={styles.button} disabled={disableButton}>Entrar</button>
       </form>
       <Link href="/signup">Clique aqui para criar uma conta.</Link>
     </div>

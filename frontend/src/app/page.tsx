@@ -1,5 +1,5 @@
 import Login from "@/components/login/Login"
-import styles from "./home.module.css"
+import styles from "./landing.module.css"
 
 export default function Home() {
     return (

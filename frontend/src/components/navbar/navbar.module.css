@@ -5,6 +5,11 @@
     align-items: center;
 }
 
+.subcontainer {
+    display: flex;
+    gap: 20px;
+}
+
 .logo{
     font-weight: bold;
     font-size: 22px;
@@ -14,5 +19,13 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
 }

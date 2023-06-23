@@ -2,20 +2,33 @@
 import React, { useState } from 'react';
 import styles from './signup.module.css';
 import Link from 'next/link';
-import useSignup from '@/hooks/api/useSignup';
+import { useRouter } from 'next/navigation';
 
 const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const {signupLoading, signup} = useSignup();
+  const [disableButton, setDisableButton] = useState(false)
+  const router = useRouter()
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
+    setDisableButton(true);
     try {
-      await signup(name, email, password);
-      console.log('OK!');
+      const loginPost = await fetch(`${process.env.NEXT_PUBLIC_APP_API_BASE_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password
+        }),
+      });
+      const loginResponse = await loginPost.json();
+      console.log("OK!!!!!", loginResponse);
+      router?.push("/");
     } catch (error) {
       console.log('Não.')
     }
@@ -31,7 +44,7 @@ const Signup = () => {
         <input type='email' value={email} placeholder='Digite seu e-mail' className={styles.input} onChange={e => setEmail(e.target.value)} required></input>
         <h3>Senha</h3>
         <input type='password' placeholder='Digite sua senha' className={styles.input} onChange={e => setPassword(e.target.value)} required></input>
-        <button type='submit' disabled={signupLoading} className={styles.button}>Criar conta</button>
+        <button type='submit' disabled={disableButton} className={styles.button}>Criar conta</button>
       </form>
       <Link href="/">Fazer login</Link>
     </div>
