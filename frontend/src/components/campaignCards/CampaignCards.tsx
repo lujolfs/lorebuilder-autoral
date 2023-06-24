@@ -5,7 +5,13 @@ import styles from './campaigncards.module.css';
 import Link from 'next/link';
 
 const CampaignCards = () => {
-const [campaignsArray, setCampaignsArray]: any[] = useState([])
+interface Campaign {
+    id: string,
+    name: string,
+    image: string;
+}
+
+const [campaignsArray, setCampaignsArray] = useState<Campaign[]>([])
 
 async function fetchCampaigns() {
   try {
@@ -28,12 +34,12 @@ useEffect(() => {fetchCampaigns()}, [] )
 
   return (
       <div className={styles.container}>
-        <h1>Campaigns</h1>
+        <div className={styles.title}><h1>Campaigns</h1></div>
         <div className={styles.subcontainer}>
           <div className={styles.cards}>
-          {campaignsArray.map ((campaign: any) => (
+          {campaignsArray.map (campaign => (
                               <>
-                              <div className={styles.card} key={campaign.id} name={campaign.name}>
+                              <Link href={`/campaigns/${campaign.id}`} className={styles.card} key={campaign.id}>
                                 <div className={styles.imgContainer}>
                                   <Image 
                                   src={campaign.image}
@@ -45,13 +51,13 @@ useEffect(() => {fetchCampaigns()}, [] )
                                     <h3>{campaign.name}</h3>
                                   </div>
                                 </div>
-                              </div>
+                              </Link>
                               </>
                           ))}
           </div>
-          <button className={styles.button}>
+          <Link href={'/campaigns/create'}><button className={styles.button}>
             ADD
-          </button>
+          </button></Link>
         </div>
       </div>
   )

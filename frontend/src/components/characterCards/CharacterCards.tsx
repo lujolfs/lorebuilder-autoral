@@ -5,7 +5,13 @@ import styles from './charactercards.module.css';
 import Link from 'next/link';
 
 const CharacterCards = () => {
-const [charactersArray, setCharactersArray]: any[] = useState([])
+  interface Character {
+    id: string,
+    name: string,
+    image: string;
+}
+  
+const [charactersArray, setCharactersArray] = useState<Character[]>([])
 
 async function fetchcharacters() {
   try {
@@ -28,12 +34,12 @@ useEffect(() => {fetchcharacters()}, [] )
 
   return (
       <div className={styles.container}>
-        <h1>Characters</h1>
+        <div className={styles.title}><h1>Characters</h1></div>
         <div className={styles.subcontainer}>
           <div className={styles.cards}>
           {charactersArray.map ((character: any) => (
                               <>
-                              <div className={styles.card} key={character.id} name={character.name}>
+                              <Link href={`/characters/${character.id}`} className={styles.card} key={character.id}>
                                 <div className={styles.imgContainer}>
                                   <Image 
                                   src={character.photo}
@@ -45,13 +51,13 @@ useEffect(() => {fetchcharacters()}, [] )
                                     <h3>{character.name}</h3>
                                   </div>
                                 </div>
-                              </div>
+                              </Link>
                               </>
                           ))}
           </div>
-          <button className={styles.button}>
+          <Link href={'/characters/create'}><button className={styles.button}>
             ADD
-          </button>
+          </button></Link>
         </div>
       </div>
   )

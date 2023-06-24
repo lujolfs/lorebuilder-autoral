@@ -5,7 +5,13 @@ import styles from './settingcards.module.css';
 import Link from 'next/link';
 
 const SettingCards = () => {
-const [settingsArray, setSettingsArray]: any[] = useState([])
+  interface Setting {
+    id: string,
+    name: string,
+    image: string;
+}
+
+const [settingsArray, setSettingsArray] = useState<Setting[]>([])
 
 async function fetchSettings() {
   try {
@@ -28,12 +34,12 @@ useEffect(() => {fetchSettings()}, [] )
 
   return (
       <div className={styles.container}>
-        <h1>Settings</h1>
+        <div className={styles.title}><h1>Settings</h1></div>
         <div className={styles.subcontainer}>
           <div className={styles.cards}>
-          {settingsArray.map ((setting: any) => (
+          {settingsArray.map (setting => (
                               <>
-                              <div className={styles.card} key={setting.id} name={setting.name}>
+                              <Link href={`/settings/${setting.id}`} className={styles.card} key={setting.id}>
                                 <div className={styles.imgContainer}>
                                   <Image 
                                   src={setting.image}
@@ -45,21 +51,8 @@ useEffect(() => {fetchSettings()}, [] )
                                     <h3>{setting.name}</h3>
                                   </div>
                                 </div>
-                              </div>
-                              <div className={styles.card} key={setting.id} name={setting.name}>
-                                <div className={styles.imgContainer}>
-                                  <Image 
-                                  src={setting.image}
-                                  fill={true}
-                                  alt="Imagem que descreve o cenário."
-                                  className={styles.img}
-                                  />
-                                  <div className={styles.imgText}>
-                                    <h3>{setting.name}</h3>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className={styles.card} key={setting.id} name={setting.name}>
+                              </Link>
+                              <div className={styles.card} key={setting.id}>
                                 <div className={styles.imgContainer}>
                                   <Image 
                                   src={setting.image}
@@ -75,9 +68,9 @@ useEffect(() => {fetchSettings()}, [] )
                               </>
                           ))}
           </div>
-          <button className={styles.button}>
+          <Link href={'/settings/create'}><button className={styles.button}>
             ADD
-          </button>
+          </button></Link>
         </div>
       </div>
   )
