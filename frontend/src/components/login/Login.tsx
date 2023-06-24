@@ -12,7 +12,7 @@ const Login = () => {
 
   useEffect(() => {
    const fetchItem: any = localStorage.getItem('token')
-   if (fetchItem) router?.push('/home')
+   if (fetchItem) router?.push('/dashboard')
   }, [])
 
   async function handleSubmit(event: React.FormEvent) {
@@ -32,7 +32,7 @@ const Login = () => {
       const loginResponse = await loginPost.json();
       localStorage.setItem("token", loginResponse.accessToken)
       console.log("OK!!!!!", loginResponse);
-      router?.push('/home');
+      router?.push('/dashboard');
     } catch (error) {
       console.log('Não.')
     }

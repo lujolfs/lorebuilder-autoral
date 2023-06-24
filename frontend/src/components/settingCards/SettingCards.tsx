@@ -1,9 +1,11 @@
 "use client"
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import styles from './settingcards.module.css';
 import Link from 'next/link';
 
 const SettingCards = () => {
+const [settingsArray, setSettingsArray]: any[] = useState([])
 
 async function fetchSettings() {
   try {
@@ -14,7 +16,8 @@ async function fetchSettings() {
       },
     });
     const settingsResponse = await settingsFetch.json();
-    console.log("OK!!!!!", settingsResponse);
+    setSettingsArray(settingsResponse);
+    console.log("OK!!!!!", settingsResponse, settingsArray);
   } catch (error) {
     console.log('Não.')
   }
@@ -24,7 +27,59 @@ useEffect(() => {fetchSettings()}, [] )
 
 
   return (
-    <h1>SETTINGS</h1>
+      <div className={styles.container}>
+        <h1>Settings</h1>
+        <div className={styles.subcontainer}>
+          <div className={styles.cards}>
+          {settingsArray.map ((setting: any) => (
+                              <>
+                              <div className={styles.card} key={setting.id} name={setting.name}>
+                                <div className={styles.imgContainer}>
+                                  <Image 
+                                  src={setting.image}
+                                  fill={true}
+                                  alt="Imagem que descreve o cenário."
+                                  className={styles.img}
+                                  />
+                                  <div className={styles.imgText}>
+                                    <h3>{setting.name}</h3>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className={styles.card} key={setting.id} name={setting.name}>
+                                <div className={styles.imgContainer}>
+                                  <Image 
+                                  src={setting.image}
+                                  fill={true}
+                                  alt="Imagem que descreve o cenário."
+                                  className={styles.img}
+                                  />
+                                  <div className={styles.imgText}>
+                                    <h3>{setting.name}</h3>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className={styles.card} key={setting.id} name={setting.name}>
+                                <div className={styles.imgContainer}>
+                                  <Image 
+                                  src={setting.image}
+                                  fill={true}
+                                  alt="Imagem que descreve o cenário."
+                                  className={styles.img}
+                                  />
+                                  <div className={styles.imgText}>
+                                    <h3>{setting.name}</h3>
+                                  </div>
+                                </div>
+                              </div>
+                              </>
+                          ))}
+          </div>
+          <button className={styles.button}>
+            ADD
+          </button>
+        </div>
+      </div>
   )
 }
 

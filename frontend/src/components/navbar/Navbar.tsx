@@ -8,7 +8,7 @@ const links = [
     {
         id: 1,
         title: "Home",
-        url: "/home"
+        url: "/dashboard"
     },
     {
         id: 2,
@@ -19,7 +19,18 @@ const links = [
         id: 3,
         title: "Campaigns",
         url: "/campaigns"
+    },
+    {
+        id: 4,
+        title: "Characters",
+        url: "/characters"
+    },
+    {
+        id: 5,
+        title: "Lineages",
+        url: "/lineages"
     }
+
 ]
 
 const Navbar = () => {
@@ -33,7 +44,7 @@ const Navbar = () => {
 
   return (
     <div className={styles.container}>
-            <Link href="/home" className={styles.logo}>LOREBUILDER</Link>
+            <Link href="/dashboard" className={styles.logo}>LOREBUILDER</Link>
             <div className={styles.subcontainer}>
                 <div className={styles.links}>
                     {links.map (link => (
