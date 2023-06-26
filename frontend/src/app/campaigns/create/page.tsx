@@ -13,7 +13,7 @@ const CreateCampaign = () => {
   const [disableButton, setDisableButton] = useState(false)
   const router = useRouter()
 
-  async function submit(event: React.FormEvent) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setDisableButton(true);
     try {

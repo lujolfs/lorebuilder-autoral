@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import SettingCards from '@/components/settingCards/SettingCards';
 import CampaignCards from '@/components/campaignCards/CampaignCards';
 import CharacterCards from '@/components/characterCards/CharacterCards';
-import CheckAuth from '@/utils/checkAuth';
 
 export default function Dashboard() {
     const [checkAuth, setCheckAuth] = useState(false)

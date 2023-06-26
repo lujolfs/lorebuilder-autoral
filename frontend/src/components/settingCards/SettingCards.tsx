@@ -52,19 +52,6 @@ useEffect(() => {fetchSettings()}, [] )
                                   </div>
                                 </div>
                               </Link>
-                              <div className={styles.card} key={setting.id}>
-                                <div className={styles.imgContainer}>
-                                  <Image 
-                                  src={setting.image}
-                                  fill={true}
-                                  alt="Imagem que descreve o cenário."
-                                  className={styles.img}
-                                  />
-                                  <div className={styles.imgText}>
-                                    <h3>{setting.name}</h3>
-                                  </div>
-                                </div>
-                              </div>
                               </>
                           ))}
           </div>

@@ -19,7 +19,7 @@ export class CreateCharacterDto {
     user_id: number;
 
     @IsNumber()
-    @IsNotEmpty()
+    @IsOptional()
     @ApiProperty()
     lineage_id: number;
 
