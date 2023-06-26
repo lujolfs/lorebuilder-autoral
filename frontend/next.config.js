@@ -7,7 +7,8 @@ const nextConfig = {
                 hostname: "**",
             }
         ]
-    }
+    },
+    target: 'serverless'
 }
 
 module.exports = nextConfig
