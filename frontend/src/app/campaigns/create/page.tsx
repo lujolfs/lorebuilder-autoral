@@ -2,6 +2,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
+import { useRouter } from 'next/navigation';
 
 const CreateCampaign = () => {
     interface Setting {
@@ -10,6 +11,7 @@ const CreateCampaign = () => {
       image: string;
   }
 
+  const router = useRouter();
   const [name, setName] = useState('');
   const [settings, setSettings] = useState<Setting[]>([]);
   const [image, setImage] = useState('');
@@ -35,6 +37,7 @@ const CreateCampaign = () => {
       });
       const campaignResponse = await campaignPost.json();
       console.log("OK!!!!!", typeof setting_id, campaignResponse);
+      router?.push("/dashboard");
     } catch (error) {
       console.log('Não.')
     }

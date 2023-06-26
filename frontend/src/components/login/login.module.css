@@ -23,16 +23,17 @@
 
 .title {
     font-size: 70px;
-    background-color: aqua;
 }
 
 .button {
     width: 300px;
     padding: 20px;
     cursor: pointer;
-    background-color: aquamarine;
     border: none;
     border-radius: 5px;
+    font-family: inherit;
+    font-size: 25px;
+    background-color: black;
     color: #eee;
     font-weight: bold;
 }

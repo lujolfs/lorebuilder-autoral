@@ -40,9 +40,9 @@ const CreateSetting = () => {
       <form className={styles.form} onSubmit={submit}>
         <h3>Name your setting.</h3>
         <input type='name' value={name} placeholder="Type your setting's name" className={styles.input} onChange={e => setName(e.target.value)} required></input>
-        <h3>Choose a ruleset. This one is optional.</h3>
+        <h3>Choose a ruleset.</h3>
         <input type='ruleset' value={ruleset} placeholder='Choose a ruleset' className={styles.input} onChange={e => setRuleset(e.target.value)}></input>
-        <h3>Pick an image to illustrate your setting. This one is also optional.</h3>
+        <h3>Pick an image to illustrate your setting.</h3>
         <input type='url' placeholder='Link your image here.' className={styles.input} onChange={e => setImage(e.target.value)}></input>
         <button type='submit' disabled={disableButton} className={styles.button}>Create setting</button>
       </form>

@@ -53,7 +53,7 @@ const CreateCharacter = () => {
           "user_id": 0,
           "campaign_id": Number(campaign_id),
           name,
-          hp,
+          "hp": Number(hp),
           "strength": Number(str),
           "dexterity": Number(dex),
           "constitution": Number(con),
@@ -67,6 +67,7 @@ const CreateCharacter = () => {
       });
       const CharacterResponse = await CharacterPost.json();
       console.log("OK!!!!!", typeof campaign_id, CharacterResponse);
+      router?.push("/dashboard");
     } catch (error) {
       console.log('Não.')
     }
