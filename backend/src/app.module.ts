@@ -13,7 +13,7 @@ import { CharactersModule } from './characters/characters.module';
 import { MovesetsModule } from './movesets/movesets.module';
 
 @Module({
-  imports: [PrismaModule, ConfigModule.forRoot({isGlobal: true}), ActionsModule, UsersModule, AuthModule, SettingsModule, CampaignsModule, LineagesModule, CharactersModule, MovesetsModule],
+  imports: [PrismaModule, ConfigModule.forRoot({isGlobal: true, envFilePath: ['.env', '.env.test']}), ActionsModule, UsersModule, AuthModule, SettingsModule, CampaignsModule, LineagesModule, CharactersModule, MovesetsModule],
   controllers: [AppController],
   providers: [AppService],
 })

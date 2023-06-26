@@ -1,17 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Listbox } from '@headlessui/react';
 import styles from './page.module.css';
-import { useRouter } from 'next/navigation';
 
 const CreateCampaign = () => {
+    interface Setting {
+      id: string,
+      name: string,
+      image: string;
+  }
+
   const [name, setName] = useState('');
-  const [settings, setSettings] = useState([]);
+  const [settings, setSettings] = useState<Setting[]>([]);
   const [image, setImage] = useState('');
-  const [setting_id, setSettingId] = useState(null);
+  const [setting_id, setSettingId] = useState<string>();
   const [isLoaded, setIsLoaded] = useState(false);
   const [disableButton, setDisableButton] = useState(false)
-  const router = useRouter()
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,7 +28,7 @@ const CreateCampaign = () => {
           "Authorization": "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify({
-          setting_id,
+          "setting_id": Number(setting_id),
           name,
           image
         }),
@@ -53,7 +57,8 @@ const CreateCampaign = () => {
     }
   }
 
-  useEffect(() => {fetchSettings()}, [] )
+  
+  useEffect(() => {fetchSettings()}, [])
 
   if (!setIsLoaded) {
     return (
@@ -68,7 +73,7 @@ const CreateCampaign = () => {
         <h3>Name your campaign.</h3>
         <input type='name' value={name} placeholder="Type your campaign's name" className={styles.input} onChange={e => setName(e.target.value)} required></input>
         <h3>Select the setting of your campaign.</h3>
-        <select value={setting_id} onChange={e => setSettingId(Number(e.target.value))}>
+        <select value={setting_id} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSettingId(e.target.value) }>
           <option value={""}>{'Select a setting'}</option>
                 {settings.map((setting) => (
                   <option key={setting.id} value={setting.id}>
@@ -76,8 +81,8 @@ const CreateCampaign = () => {
                   </option>
                   ))}
           </select>
-        <h3>Pick an image to illustrate your campaign. This is optional.</h3>
-        <input type='url' placeholder='Link your image here.' className={styles.input} onChange={e => setImage(e.target.value)}></input>
+        <h3>Pick an image to illustrate your campaign.</h3>
+        <input type='url' placeholder='Link your image here.' className={styles.input} onChange={e => setImage(e.target.value)} required></input>
         <button type='submit' disabled={disableButton} className={styles.button}>Create campaign</button>
       </form>
     </div>

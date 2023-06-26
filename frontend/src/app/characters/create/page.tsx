@@ -1,13 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 
 const CreateCharacter = () => {
+  interface Campaign {
+    id: string,
+    setting_id: string,
+    name: string,
+    image: string;
+}
   const [name, setName] = useState('');
-  const [campaigns, setCampaigns] = useState([]);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [photo, setPhoto] = useState('');
-  const [campaign_id, setCampaignId] = useState(null);
+  const [campaign_id, setCampaignId] = useState<string>();
   const [hp, setHp] = useState('')
   const [str, setStr] = useState('')
   const [dex, setDex] = useState('')
@@ -32,7 +39,7 @@ const CreateCharacter = () => {
   }, []);
 
 
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
     setDisableButton(true);
     try {
@@ -44,15 +51,15 @@ const CreateCharacter = () => {
         },
         body: JSON.stringify({
           "user_id": 0,
-          campaign_id,
+          "campaign_id": Number(campaign_id),
           name,
           hp,
-          "strength": str,
-          "dexterity": dex,
-          "constitution": con,
-          "intelligence": int,
-          "wisdom": wis,
-          "charisma": cha,
+          "strength": Number(str),
+          "dexterity": Number(dex),
+          "constitution": Number(con),
+          "intelligence": Number(int),
+          "wisdom": Number(wis),
+          "charisma": Number(cha),
           speed,
           "biography": bio,
           photo
@@ -82,7 +89,7 @@ const CreateCharacter = () => {
     }
   }
 
-  useEffect(() => {fetchCampaigns()}, [] )
+  useEffect(() => {fetchCampaigns()}, [])
 
   if (!setIsLoaded) {
     return (
@@ -97,7 +104,7 @@ const CreateCharacter = () => {
         <h3>Name your Character.</h3>
         <input type='name' value={name} placeholder="Name" className={styles.input} onChange={e => setName(e.target.value)} required></input>
         <h3>Select the campaign your character will be played at.</h3>
-        <select value={campaign_id} onChange={e => setCampaignId(Number(e.target.value))} required>
+        <select value={campaign_id} onChange={e => setCampaignId(e.target.value)} required>
           <option value={""}>{'Select a campaign'}</option>
                 {campaigns.map((campaign) => (
                   <option key={campaign.id} value={campaign.id}>
@@ -110,23 +117,23 @@ const CreateCharacter = () => {
         <h3>Now tell me your stats.</h3>
         <div className={styles.stats}>
           <div className={styles.statContainer}>
-            <input type='number' value={hp} placeholder="HP" className={styles.input} onChange={e => setHp(Number(e.target.value))} required></input>
+            <input type='number' value={hp} placeholder="HP" className={styles.input} onChange={e => setHp(e.target.value)} required></input>
             <input type='text' value={speed} placeholder="SPEED" className={styles.input} onChange={e => setSpeed(e.target.value)} required></input>
           </div>
           <div className={styles.statContainer}>
-            <input type='number' value={str} placeholder="STR" className={styles.input} onChange={e => setStr(Number(e.target.value))} required></input>
-            <input type='number' value={dex} placeholder="DEX" className={styles.input} onChange={e => setDex(Number(e.target.value))} required></input>
+            <input type='number' value={str} placeholder="STR" className={styles.input} onChange={e => setStr(e.target.value)} required></input>
+            <input type='number' value={dex} placeholder="DEX" className={styles.input} onChange={e => setDex(e.target.value)} required></input>
           </div>
           <div className={styles.statContainer}>
-            <input type='number' value={con} placeholder="CON" className={styles.input} onChange={e => setCon(Number(e.target.value))} required></input>
-            <input type='number' value={int} placeholder="INT" className={styles.input} onChange={e => setInt(Number(e.target.value))} required></input>
+            <input type='number' value={con} placeholder="CON" className={styles.input} onChange={e => setCon(e.target.value)} required></input>
+            <input type='number' value={int} placeholder="INT" className={styles.input} onChange={e => setInt(e.target.value)} required></input>
           </div>
           <div className={styles.statContainer}>
-            <input type='number' value={wis} placeholder="WIS" className={styles.input} onChange={e => setWis(Number(e.target.value))} required></input>
-            <input type='number' value={cha} placeholder="CHA" className={styles.input} onChange={e => setCha(Number(e.target.value))} required></input>
+            <input type='number' value={wis} placeholder="WIS" className={styles.input} onChange={e => setWis(e.target.value)} required></input>
+            <input type='number' value={cha} placeholder="CHA" className={styles.input} onChange={e => setCha(e.target.value)} required></input>
           </div>
         </div>
-        <h3>Write about your character's life.</h3>
+        <h3>Write about your character.</h3>
         <input type='text' value={bio} placeholder="Biography" className={styles.bio} onChange={e => setBio(e.target.value)} required></input>
         <button type='submit' disabled={disableButton} className={styles.button}>Create Character</button>
       </form>
