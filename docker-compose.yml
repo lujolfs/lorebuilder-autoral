@@ -20,5 +20,12 @@ services:
     env_file:
       - backend/.env
 
+  react:
+    container_name: react
+    build: ./frontend
+    volumes:
+      - react-volume:/var/www/html
+
 volumes:
   postgres-volume:
+  react-volume:
