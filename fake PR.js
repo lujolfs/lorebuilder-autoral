@@ -1,3 +1,3 @@
 export default function fakePr() {
-    return console.log("Hello world!! caralhgsdfjhadslkfhlashkjfdhjas")
+    return console.log("Hello world!! dasadsadas")
 };
