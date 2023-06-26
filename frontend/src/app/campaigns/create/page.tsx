@@ -8,7 +8,7 @@ const CreateCampaign = () => {
   const [name, setName] = useState('');
   const [settings, setSettings] = useState([]);
   const [image, setImage] = useState('');
-  const [selectedSetting, setSelectedSetting] = useState(null);
+  const [setting_id, setSettingId] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [disableButton, setDisableButton] = useState(false)
   const router = useRouter()
@@ -24,13 +24,13 @@ const CreateCampaign = () => {
           "Authorization": "Bearer " + localStorage.getItem("token")
         },
         body: JSON.stringify({
+          setting_id,
           name,
           image
         }),
       });
       const campaignResponse = await campaignPost.json();
-      console.log("OK!!!!!", campaignResponse);
-      router?.push("/dashboard");
+      console.log("OK!!!!!", typeof setting_id, campaignResponse);
     } catch (error) {
       console.log('Não.')
     }
@@ -68,16 +68,14 @@ const CreateCampaign = () => {
         <h3>Name your campaign.</h3>
         <input type='name' value={name} placeholder="Type your campaign's name" className={styles.input} onChange={e => setName(e.target.value)} required></input>
         <h3>Select the setting of your campaign.</h3>
-        <Listbox value={selectedSetting} onChange={setSelectedSetting}>
-          <Listbox.Button>{selectedSetting || 'Select a setting'}</Listbox.Button>
-            <Listbox.Options>
+        <select value={setting_id} onChange={e => setSettingId(Number(e.target.value))}>
+          <option value={""}>{'Select a setting'}</option>
                 {settings.map((setting) => (
-                  <Listbox.Option key={setting.id} value={setting.name}>
+                  <option key={setting.id} value={setting.id}>
                     {setting.name}
-                  </Listbox.Option>
+                  </option>
                   ))}
-              </Listbox.Options>
-          </Listbox>
+          </select>
         <h3>Pick an image to illustrate your campaign. This is optional.</h3>
         <input type='url' placeholder='Link your image here.' className={styles.input} onChange={e => setImage(e.target.value)}></input>
         <button type='submit' disabled={disableButton} className={styles.button}>Create campaign</button>

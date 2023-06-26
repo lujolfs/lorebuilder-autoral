@@ -11,9 +11,20 @@ const Login = () => {
   const router = useRouter();
 
   useEffect(() => {
-   const fetchItem: any = localStorage.getItem('token')
-   if (fetchItem) router?.push('/dashboard')
-  }, [])
+   const fetchToken: any = localStorage.getItem('token')
+   if (fetchToken) {
+      if (!isTokenExpired(fetchToken)) {
+        router?.push('/dashboard')
+      }
+    }
+   }, [])
+
+  function isTokenExpired(token: any) {
+    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    const isExpired = Date.now() >= expiry * 1000;
+    console.log(isExpired);
+    return isExpired;
+  }
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
